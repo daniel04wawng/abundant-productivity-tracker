@@ -306,7 +306,9 @@ def main() -> None:
             )
             print("Connected successfully")
         except Exception as e:
-            print(f"Failed to connect to Google Sheets: {e}")
+            import traceback
+            print(f"Failed to connect to Google Sheets: {type(e).__name__}: {str(e)}")
+            traceback.print_exc()
             raise
         ensure_tracker_headers(tracker_ws)
         print("Computing tracker counts...")
