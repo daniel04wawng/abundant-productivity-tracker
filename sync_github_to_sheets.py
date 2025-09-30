@@ -294,6 +294,7 @@ def main() -> None:
     repo = config["GH_REPO"]
     prs = get_pull_requests(session, owner, repo, state="all")
     print(f"Fetched {len(prs)} PRs from {owner}/{repo}")
+    print(f"Mode: {config['MODE']}, Track by: {config['TRACK_BY']}")
 
     if config["MODE"] == "tracker":
         tracker_ws = connect_sheet(
