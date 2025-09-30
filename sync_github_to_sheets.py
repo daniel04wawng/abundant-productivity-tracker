@@ -297,13 +297,21 @@ def main() -> None:
     print(f"Mode: {config['MODE']}, Track by: {config['TRACK_BY']}")
 
     if config["MODE"] == "tracker":
-        tracker_ws = connect_sheet(
-            config["GOOGLE_SHEETS_ID"],
-            config["GOOGLE_SERVICE_ACCOUNT_FILE"],
-            config["TRACKER_SHEET_NAME"],
-        )
+        print(f"Connecting to Google Sheets ID: {config['GOOGLE_SHEETS_ID'][:10]}...")
+        try:
+            tracker_ws = connect_sheet(
+                config["GOOGLE_SHEETS_ID"],
+                config["GOOGLE_SERVICE_ACCOUNT_FILE"],
+                config["TRACKER_SHEET_NAME"],
+            )
+            print("Connected successfully")
+        except Exception as e:
+            print(f"Failed to connect to Google Sheets: {e}")
+            raise
         ensure_tracker_headers(tracker_ws)
+        print("Computing tracker counts...")
         counts = compute_tracker_counts(session, owner, repo, prs, config["TRACK_BY"])
+        print(f"Found {len(counts)} accounts with review requests")
         # Clear existing (keep sheet), write fresh counts
         tracker_ws.clear()
         ensure_tracker_headers(tracker_ws)
